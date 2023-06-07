@@ -8,6 +8,8 @@ import 'package:get/get.dart';
 import 'utills/apptheme.dart';
 
 void main() async {
+
+
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
   await SystemChrome.setPreferredOrientations([

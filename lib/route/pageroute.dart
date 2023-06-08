@@ -4,8 +4,10 @@ import 'package:chat_flutter_app/screen/dashboardscreen.dart';
 import 'package:chat_flutter_app/screen/introductionscreen.dart';
 import 'package:chat_flutter_app/screen/number_screen.dart';
 import 'package:chat_flutter_app/screen/splashscreen.dart';
+import 'package:chat_flutter_app/screen/verification_screen.dart';
 import 'package:get/get_navigation/src/routes/get_route.dart';
 
+import '../binding/verification_binidng.dart';
 import 'nameroute.dart';
 
 class PageRoutes {
@@ -28,6 +30,11 @@ class PageRoutes {
     GetPage(
       name: NameRoutes.dashBoardScreen,
       page: () => DashBoardScreen(),
+    ),
+    GetPage(
+      name: NameRoutes.verificationScreen,
+      page: () => VerificationScreen(),
+      binding: VerificationBinding(),
     ),
 
     GetPage(

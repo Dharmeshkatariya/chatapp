@@ -4,4 +4,5 @@ class NameRoutes {
   static const String numberScreen = "/numberScreen";
   static const String dashBoardScreen = "/dashBoardScreen";
   static const String introductionViewScreen = "/introductionViewScreen";
+  static const String verificationScreen = "/verificationScreen";
 }

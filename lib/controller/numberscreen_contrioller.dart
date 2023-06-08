@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:image_picker/image_picker.dart';
 
+import '../firebase/firebase.dart';
 import '../modal/usermodal.dart';
 import '../utills/app_permission_handler.dart';
 import '../utills/image.dart';
@@ -18,12 +19,12 @@ class NumberScreenController extends GetxController{
   TextEditingController numberController = TextEditingController();
   TextEditingController otpController = TextEditingController();
   TextEditingController nameController = TextEditingController();
-  String code = "+92";
+  String code = "+91";
   RxString numberError = RxString("");
   RxString nameError = RxString("");
   RxString pinError = RxString("");
   FirebaseAuth auth = FirebaseAuth.instance;
-  // AppFirebase appFirebase = AppFirebase();
+   AppFirebase appFirebase = AppFirebase();
   late String number;
   RxBool isLoading = RxBool(false);
   var selectedImage = "".obs;
@@ -44,22 +45,10 @@ class NumberScreenController extends GetxController{
     } else {
       numberError("");
       number = code + numberController.text;
-      // await appFirebase.sendVerificationCode(number);
+      await appFirebase.sendVerificationCode(number);
     }
   }
 
-  void verifyOTP() async {
-    if (otpController.text.isEmpty) {
-      pinError.value = "Field is required";
-    } else if (otpController.text.length < 6) {
-      pinError.value = "Invalid Pin";
-    } else {
-      isLoading.value = true;
-      // await appFirebase.verifyOTP(otpController.text);
-      isLoading.value = false;
-      // Get.off(const UserInfoScreen());
-    }
-  }
 
   // void getImage(ImageSource source) async {
   //   switch (source) {

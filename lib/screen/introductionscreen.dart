@@ -37,13 +37,14 @@ class IntroductionScreen extends StatelessWidget {
       "assets/image/uber.jpg",
     ),
   ]);
-
   var currentShowIndex = 0;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+
       backgroundColor: Theme.of(context).backgroundColor,
+
       body: Column(
         children: [
           SizedBox(

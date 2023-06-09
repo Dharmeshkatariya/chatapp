@@ -1,7 +1,14 @@
+import 'dart:html';
+
+import 'package:chat_flutter_app/route/nameroute.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:permission_handler/permission_handler.dart';
 
 import '../firebase/firebase.dart';
+import '../utills/image.dart';
 
 class VerificationController extends GetxController{
 
@@ -39,7 +46,21 @@ class VerificationController extends GetxController{
       isLoading.value = true;
       await appFirebase.verifyOTP(otpController.text);
       isLoading.value = false;
-      // Get.off(const UserInfoScreen());
+     Get.offNamed(NameRoutes.userProfileScreen);
     }
   }
+  // void getImage(ImageSource source) async {
+  //   switch (source) {
+  //     case ImageSource.camera:
+  //       File file = (await imageFromCamera(true)) as File;
+  //       selectedImage.value = file.path;
+  //       break;
+  //     case ImageSource.gallery:
+  //       File file = await imageFromGallery(true);
+  //       selectedImage.value = file.path;
+  //       break;
+  //   }
+  // }
+
+
 }

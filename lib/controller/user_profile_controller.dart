@@ -1,95 +1,63 @@
+import 'dart:io';
+
+import 'package:chat_flutter_app/route/nameroute.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+
 import '../firebase/firebase.dart';
+import '../modal/usermodal.dart';
 import '../utills/app_permission_handler.dart';
 
-class NumberScreenController extends GetxController {
-  TextEditingController numberController = TextEditingController();
-  TextEditingController otpController = TextEditingController();
-  TextEditingController nameController = TextEditingController();
-  String code = "+91";
-  RxString numberError = RxString("");
-  RxString nameError = RxString("");
-  RxString pinError = RxString("");
-  FirebaseAuth auth = FirebaseAuth.instance;
-  AppFirebase appFirebase = AppFirebase();
+class UserProfileController extends GetxController {
+  final FirebaseStorage firebaseStorage = FirebaseStorage.instance;
+
+  RxBool isLoading = false.obs;
   late String number;
-  RxBool isLoading = RxBool(false);
   var selectedImage = "".obs;
+  FirebaseAuth auth = FirebaseAuth.instance;
   AppPermission appPermission = AppPermission();
+  RxString networkImage = "".obs;
+  final nameController = TextEditingController();
+  RxString nameError = "".obs;
 
-  @override
-  void onClose() {
-    super.onClose();
-    numberController.dispose();
-    otpController.dispose();
-  }
-
-  void sendOTP() async {
-    if (numberController.text.isEmpty) {
-      numberError("Field is required");
-    } else if (numberController.text.length < 10) {
-      numberError.value = "Invalid Number";
+  void uploadUserData() async {
+    if (nameController.text.isEmpty) {
+      nameError("Field is required");
+    } else if (selectedImage.value == "") {
+      printError(info: "Image is required");
     } else {
-      numberError("");
-      number = code + numberController.text;
-      await appFirebase.sendVerificationCode(number);
+      nameError.value = "";
+      isLoading.value = true;
+      AppFirebase appFirebase = AppFirebase();
+
+      networkImage.value =
+          uploadImageToStorage("userfile", "/${auth.currentUser!.email}");
+      var userModel = UserModel(
+          uId: auth.currentUser!.uid,
+          name: nameController.text,
+          image: networkImage.value,
+          number: number,
+          status: "Hey I'm using this app",
+          typing: "false",
+          online: DateTime.now().toString());
+      await appFirebase.createUser(userModel).then((value) => isLoading(false));
+      Get.offAllNamed(NameRoutes.dashBoardScreen);
     }
   }
 
-// void getImage(ImageSource source) async {
-//   switch (source) {
-//     case ImageSource.camera:
-//       File file = await imageFromCamera(true);
-//       selectedImage.value = file.path;
-//       break;
-//     case ImageSource.gallery:
-//       File file = await imageFromGallery(true);
-//       selectedImage.value = file.path;
-//       break;
-//   }
-}
-//
-// void skipInfo() {
-//   isLoading.value = true;
-//   var userModel = UserModel(
-//       uId: auth.currentUser!.uid,
-//       name: "",
-//       image: "",
-//       number: number,
-//       status: "Hey i'm using this app",
-//       typing: "false",
-//       online: DateTime.now().toString());
-//   appFirebase.createUser(userModel).then((value) => isLoading(false));
-//   Get.offAllNamed(NameRoutes.dashBoardScreen);
-// }
+  uploadImageToStorage(String childName, String filepath) async {
+    String storeImage = "";
+    Reference ref =
+        firebaseStorage.ref().child(childName).child(auth.currentUser!.uid);
 
-// void uploadUserData() async {
-//   if (nameController.text.isEmpty) {
-//     nameError("Field is required");
-//   } else if (selectedImage.value == "") {
-//     printError(info: "Image is required");
-//   } else {
-//     nameError.value = "";
-//     isLoading.value = true;
-//     String link = await appFirebase.uploadUserImage(
-//         "profile/image", auth.currentUser!.uid, File(selectedImage.value));
-//
-//     var userModel = UserModel(
-//         uId: auth.currentUser!.uid,
-//         name: nameController.text,
-//         image: link,
-//         number: number,
-//         status: "Hey I'm using this app",
-//         typing: "false",
-//         online: DateTime.now().toString());
-//     await appFirebase.createUser(userModel).then((value) => isLoading(false));
-//     Get.offAllNamed(Routes.DASHBAORD);
-//   }
-// }
-//
+    UploadTask uploadTask = ref.putFile(File(filepath));
+    await Future.value(uploadTask);
+    storeImage = await ref.getDownloadURL();
+    return storeImage;
+  }
+
 // void showPicker(BuildContext context) {
 //   Get.bottomSheet(
 //       SafeArea(
@@ -141,7 +109,7 @@ class NumberScreenController extends GetxController {
 //                   Navigator.pop(context);
 //                   var status = await appPermission.isCameraPermissionOk();
 //                   switch (status) {
-//                     case PermissionStatus.denied:
+//                     case  PermissionStatus.denied:
 //                       var status = await Permission.camera.request().isDenied;
 //                       if (status) {
 //                         getImage(ImageSource.camera);
@@ -171,3 +139,4 @@ class NumberScreenController extends GetxController {
 //       backgroundColor: Theme.of(context).backgroundColor,
 //       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30)));
 // }
+}

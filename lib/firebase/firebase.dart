@@ -48,11 +48,5 @@ class AppFirebase {
     return await ref.doc(userModel.uId).set(userModel.toJson());
   }
 
-  Future<String> uploadUserImage(String path, String uId, File file) async {
-    Reference storage = FirebaseStorage.instance.ref(uId).child(path);
-    UploadTask task = storage.putFile(file);
-    TaskSnapshot snapshot = await task;
-    String link = await snapshot.ref.getDownloadURL();
-    return link;
-  }
+
 }

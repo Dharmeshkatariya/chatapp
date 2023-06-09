@@ -10,6 +10,8 @@ import '../modal/usermodal.dart';
 
 
 class AppFirebase {
+
+
   Future<void> sendVerificationCode(String number) async {
     await FirebaseAuth.instance.verifyPhoneNumber(
         phoneNumber: number,
@@ -29,6 +31,8 @@ class AppFirebase {
         codeAutoRetrievalTimeout: (String verificationId) {});
   }
 
+
+
   Future<void> verifyOTP(String otp) async {
     SharedPreferences pref = await SharedPreferences.getInstance();
     String? verificationId = pref.getString("code");
@@ -37,16 +41,35 @@ class AppFirebase {
     await FirebaseAuth.instance.signInWithCredential(credential);
   }
 
+
+
   Future<void> createUser(UserModel userModel) async {
     CollectionReference ref = FirebaseFirestore.instance.collection("users");
     await FirebaseAuth.instance.currentUser?.updateDisplayName(userModel.name);
     await FirebaseAuth.instance.currentUser?.updatePhotoURL(userModel.image);
     SharedPreferences.getInstance().then((value) {
       value.setString("number", userModel.number);
+
+      print("eeeeeeeeeeeeeee");
     });
 
     return await ref.doc(userModel.uId).set(userModel.toJson());
   }
+
+
+
+
+  Future<String> uploadUserImage(String path, String uId, File file) async {
+    Reference storage = FirebaseStorage.instance.ref(uId).child(path);
+    UploadTask task = storage.putFile(file);
+    TaskSnapshot snapshot = await task;
+    String link = await snapshot.ref.getDownloadURL();
+    return link;
+  }
+
+
+
+
 
 
 }

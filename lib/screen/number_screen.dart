@@ -215,7 +215,7 @@ class NumberScreen extends GetView<NumberScreenController> {
                         color: Colors.transparent,
                         child: InkWell(
                           onTap: () {
-                            controller.sendOTP();
+                         //   controller.sendOTP();
 
                             Get.toNamed(NameRoutes.verificationScreen);
 

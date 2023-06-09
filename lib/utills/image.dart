@@ -6,7 +6,8 @@ import 'package:image_picker/image_picker.dart';
 Future<File> imageFromCamera(bool isCropped) async {
   File? result;
   final imagePicker = ImagePicker();
-  final pickedFile = await imagePicker.getImage(
+
+  final pickedFile = await imagePicker.pickImage(
     source: ImageSource.camera,
     preferredCameraDevice: CameraDevice.rear,
     imageQuality: 85,
@@ -22,7 +23,7 @@ Future<File> imageFromCamera(bool isCropped) async {
 Future<File> imageFromGallery(bool isCropped) async {
   File? result;
   final imagePicker = ImagePicker();
-  final pickedFile = await imagePicker.getImage(
+  final pickedFile = await imagePicker.pickImage(
     source: ImageSource.gallery,
     imageQuality: 85,
   );

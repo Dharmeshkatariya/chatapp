@@ -5,6 +5,8 @@ import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:pin_input_text_field/pin_input_text_field.dart';
 import 'package:loader_overlay/loader_overlay.dart';
 
+import '../route/nameroute.dart';
+
 class VerificationScreen extends GetView<VerificationController> {
   const VerificationScreen({Key? key}) : super(key: key);
 
@@ -153,7 +155,8 @@ class VerificationScreen extends GetView<VerificationController> {
                             color: Colors.transparent,
                             child: InkWell(
                               onTap: () {
-                                controller.verifyOTP();
+                              //  controller.verifyOTP();
+                                Get.offNamed(NameRoutes.userProfileScreen);
                               },
                               borderRadius: BorderRadius.circular(30),
                               child: const Center(

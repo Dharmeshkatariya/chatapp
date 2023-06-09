@@ -127,7 +127,7 @@ class UserInfoScreen extends GetView<UserProfileController> {
                                         child: controller.selectedImage.value ==
                                             ""
                                             ? Image.asset(
-                                            "assets/images/verification.jpg")
+                                            "assets/image/user.png")
                                             : Image.file(File(controller
                                             .selectedImage.value)),
                                       ),
@@ -155,7 +155,7 @@ class UserInfoScreen extends GetView<UserProfileController> {
                                             borderRadius:
                                             BorderRadius.circular(32),
                                             onTap: () {
-                                             // controller.showPicker(context);
+                                             controller.showPicker(context);
                                             },
                                             child: Padding(
                                               padding: const EdgeInsets.all(5),
